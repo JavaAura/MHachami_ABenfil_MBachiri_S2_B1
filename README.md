@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # TeamSync Application
 
 ## Overview
@@ -61,3 +62,7 @@ If work is done on feature/xxxx or fix/xxxx to develop, you have to initialize M
 The title of the Merge Request must be as this : [FEATURE|FIX][FRONTEND|BACKEND] : Some comments.
 
 If your Merge Request is still in progress you can add Draft: prefix to begining of title of MR.
+=======
+# MHachami_ABenfil_MBachiri_S2_B1
+TeamSync is a Java-based web solution designed to provide a collaborative platform for managing projects, tasks, and teams. Built using Java EE (Enterprise Edition) and following the Model-View-Controller (MVC) architecture
+>>>>>>> 6256880e0de3f9f6d07801df7e2317cd9ed693e4
