@@ -13,5 +13,14 @@
       <servlet-name>TeamServlet</servlet-name>
       <url-pattern>/team</url-pattern>
   </servlet-mapping>
+  
+  <servlet>
+	  <servlet-name>ProjectServlet</servlet-name>
+	  <servlet-class>controller.ProjectServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  		<servlet-name>ProjectServlet</servlet-name>
+  		<url-pattern>/project</url-pattern>
+  </servlet-mapping>
 
 </web-app>
