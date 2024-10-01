@@ -37,7 +37,6 @@ To build and run the application using Docker and Docker Compose, follow these s
 2. **Build the Application**:
    ```bash
    mvn clean package
-
 3. **Run Docker Compose**:
 	```bash
  	 docker-compose up --build
@@ -59,4 +58,3 @@ If work is done on feature/xxxx or fix/xxxx to develop, you have to initialize M
 The title of the Merge Request must be as this : [FEATURE|FIX][FRONTEND|BACKEND] : Some comments.
 
 If your Merge Request is still in progress you can add Draft: prefix to begining of title of MR.
-
