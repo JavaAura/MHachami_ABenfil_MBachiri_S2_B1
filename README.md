@@ -37,6 +37,7 @@ To build and run the application using Docker and Docker Compose, follow these s
 2. **Build the Application**:
    ```bash
    mvn clean package
+
 3. **Run Docker Compose**:
 	```bash
  	 docker-compose up --build

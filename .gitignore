@@ -39,3 +39,7 @@ Thumbs.db
 # Ignore Eclipse working sets
 workingSet.*
 
+# Ignore vsCode
+.vscode
+
+
