@@ -1,7 +1,5 @@
 package enums;
 
 public enum TaskStatus {
-	ToDo,
-	Doing,
-	Done
+	TO_DO, DOING, DONE
 }
