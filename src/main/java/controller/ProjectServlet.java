@@ -80,12 +80,15 @@ public class ProjectServlet extends HttpServlet {
 	protected void delete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		int id = Integer.parseInt(req.getParameter("project_id"));
 		Project project = new Project(id);
+		resp.setContentType("text/plain");
+		PrintWriter out = resp.getWriter();
 
-		try {
-			projectRepo.delete(project);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		out.println(id);
+//		try {
+//			projectRepo.delete(project);
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//		}
 	}
 
 	protected void update(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
