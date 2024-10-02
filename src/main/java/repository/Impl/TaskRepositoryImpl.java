@@ -13,7 +13,6 @@ import java.util.List;
 
 
 public class TaskRepositoryImpl implements TaskRepository {
-    private final DatabaseConnection databaseConnection = new DatabaseConnection();
 
     public void addTask(Task task) throws SQLException {
         String sql = "INSERT INTO tasks (title, description, priority, status, craetion_date, deadline) VALUES (?, ?, ?, ?, ?, ?)";
@@ -32,6 +31,12 @@ public class TaskRepositoryImpl implements TaskRepository {
     public List<Task> getAllTasks() throws SQLException {
         List<Task> tasks = new ArrayList<>();
         String sql = "SELECT * FROM tasks";
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         try (Connection conn = DatabaseConnection.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
@@ -40,10 +45,10 @@ public class TaskRepositoryImpl implements TaskRepository {
                 task.setId(rs.getInt("id"));
                 task.setTitle(rs.getString("title"));
                 task.setDescription(rs.getString("description"));
-                task.setPriority(Priority.valueOf(rs.getString("priority")));
-                task.setStatus(TaskStatus.valueOf(rs.getString("status")));
-                task.setCreationDate(LocalDate.parse(rs.getString("creation_date")));
-                task.setDeadline(LocalDate.parse(rs.getString("deadline")));
+                task.setPriority(Priority.valueOf(rs.getString("priority").toUpperCase()));
+                task.setStatus(TaskStatus.valueOf(rs.getString("status").toUpperCase()));
+                task.setCreationDate(rs.getDate("creation_date").toLocalDate());
+                task.setDeadline(rs.getDate("deadline").toLocalDate());
                 tasks.add(task);
             }
         }
@@ -62,10 +67,10 @@ public class TaskRepositoryImpl implements TaskRepository {
                 task.setId(rs.getInt("id"));
                 task.setTitle(rs.getString("title"));
                 task.setDescription(rs.getString("description"));
-                task.setPriority(enums.Priority.valueOf(rs.getString("priority")));
-                task.setStatus(enums.TaskStatus.valueOf(rs.getString("status")));
-                task.setCreationDate(LocalDate.parse(rs.getString("creation_date")));
-                task.setDeadline(LocalDate.parse(rs.getString("deadline")));
+                task.setPriority(Priority.valueOf(rs.getString("priority").toUpperCase()));
+                task.setStatus(TaskStatus.valueOf(rs.getString("status").toUpperCase()));
+                task.setCreationDate(rs.getDate("creation_date").toLocalDate());
+                task.setDeadline(rs.getDate("deadline").toLocalDate());
             }
         }
         return task;
