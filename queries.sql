@@ -95,4 +95,17 @@ CREATE TABLE member_tasks(
 	FOREIGN KEY (member_id) REFERENCES members(id)
 );
 
+/*
+ * Create tasks table
+ */
+
+create table if not exists tasks(
+    id int primary key auto_increment,
+    title varchar(150) not null unique,
+    description text not null,
+    priority enum('LOW', 'MEDIUM', 'HIGH') default 'LOW',
+    status enum('TO_DO', 'DOING', 'DONE') default 'TO_DO',
+    creation_date date default now(),
+    deadline date default now()
+);
 
