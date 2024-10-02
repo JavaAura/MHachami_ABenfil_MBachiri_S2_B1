@@ -13,6 +13,7 @@
       <servlet-name>TeamServlet</servlet-name>
       <url-pattern>/team</url-pattern>
   </servlet-mapping>
+
   
   <servlet>
 	  <servlet-name>ProjectServlet</servlet-name>
@@ -21,6 +22,7 @@
   <servlet-mapping>
   		<servlet-name>ProjectServlet</servlet-name>
   		<url-pattern>/project</url-pattern>
+  		<url-pattern>/project/</url-pattern>
   </servlet-mapping>
 
 	<servlet-mapping>
@@ -37,6 +39,17 @@
 		<servlet-name>ProjectServlet</servlet-name>
 		<url-pattern>/project/search</url-pattern>
 	</servlet-mapping>
+
+	
+	<filter>
+    <filter-name>UrlRewriteFilter</filter-name>
+    <filter-class>org.tuckey.web.filters.urlrewrite.UrlRewriteFilter</filter-class>
+</filter>
+	<filter-mapping>
+	    <filter-name>UrlRewriteFilter</filter-name>
+	    <url-pattern>/*</url-pattern>
+	</filter-mapping>
+	
 
 	<welcome-file-list>
 		<welcome-file>index.jsp</welcome-file>
