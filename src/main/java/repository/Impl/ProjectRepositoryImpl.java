@@ -13,17 +13,25 @@ import java.util.List;
 import entities.Project;
 import enums.ProjectStatus;
 import repository.ProjectRepository;
+import utils.DatabaseConnection;
 
 public class ProjectRepositoryImpl implements ProjectRepository {
-	private final Connection connection;
+	private Connection connection;
 
-	public ProjectRepositoryImpl(Connection connection) {
-		this.connection = connection; // Initialize the connection here
+	public ProjectRepositoryImpl() {
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		this.connection = DatabaseConnection.getConnection();
 	}
 
 	@Override
 	public List<Project> read() throws SQLException {
 		String query = "SELECT * FROM projects";
+
 		Statement statement = connection.createStatement();
 		ResultSet rs = statement.executeQuery(query);
 		List<Project> projects = new ArrayList<>();
@@ -33,8 +41,6 @@ public class ProjectRepositoryImpl implements ProjectRepository {
 			project = setProject(rs);
 			projects.add(project);
 		}
-
-		connection.close();
 		return projects;
 	}
 
