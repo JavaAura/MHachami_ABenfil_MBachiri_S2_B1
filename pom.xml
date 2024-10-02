@@ -37,6 +37,11 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>jstl</artifactId>
+      <version>1.0</version>
+    </dependency>
+    <dependency>
 	    <groupId>mysql</groupId>
 	    <artifactId>mysql-connector-java</artifactId>
 	    <version>8.0.33</version>
@@ -87,7 +92,17 @@
         </plugin>
       </plugins>
     </pluginManagement>
-  	 <resources>
+      <plugins>
+          <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-compiler-plugin</artifactId>
+              <configuration>
+                  <source>8</source>
+                  <target>8</target>
+              </configuration>
+          </plugin>
+      </plugins>
+      <resources>
         <resource>
             <directory>src/main/java</directory>
             <includes>
