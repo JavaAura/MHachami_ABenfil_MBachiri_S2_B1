@@ -107,7 +107,7 @@ public class ProjectRepositoryImpl implements ProjectRepository {
 
 	@Override
 	public List<Project> searchByTitle(String title) throws SQLException {
-		String query = "SELECT * FROM projects WHERE title LIKE ?";
+		String query = "SELECT * FROM projects WHERE name LIKE ?";
 		PreparedStatement pstmt = connection.prepareStatement(query);
 		String param = "%" + title + "%";
 
@@ -116,7 +116,7 @@ public class ProjectRepositoryImpl implements ProjectRepository {
 		List<Project> projects = new ArrayList<>();
 
 		while (rs.next()) {
-			Project project = new Project();
+			Project project;
 			project = setProject(rs);
 			projects.add(project);
 		}
