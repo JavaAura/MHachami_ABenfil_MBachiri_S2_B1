@@ -18,7 +18,7 @@ CREATE TABLE projects (
 				'InProgress',
 				'Paused',
 				'Completed',
-				'Canceled')
+				'Canceled') DEFAULT 'InPreparation'
 );
 
 /*

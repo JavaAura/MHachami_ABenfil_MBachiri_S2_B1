@@ -43,3 +43,5 @@ workingSet.*
 .vscode
 
 
+push.sh
+src/main/java/utils/DatabaseConnection.java
