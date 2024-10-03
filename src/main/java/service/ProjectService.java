@@ -1,6 +1,7 @@
 package service;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 
@@ -8,15 +9,16 @@ import entities.Project;
 
 public interface ProjectService {
 
-	public Project getProject(int id) throws SQLException;
+	public Project getProject(String id);
 
-	public List<Project> getAllProjects() throws SQLException;
+	public List<Project> getAllProjects();
 
-	public Project createProject(Project project) throws SQLException;
+	public Project createProject(String name, String description, LocalDate startDate, LocalDate endDate);
 
-	public Project updateProject(Project project) throws SQLException;
+	public Project updateProject(String name, String description, LocalDate startDate, LocalDate endDate, String status,
+			int id);
 
-	public void deleteProject(Project project) throws SQLException;
+	public Project deleteProject(String id);
 
 	public List<Project> searchForProject(String title) throws SQLException;
 
