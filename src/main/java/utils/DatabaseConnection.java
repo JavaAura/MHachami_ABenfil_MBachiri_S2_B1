@@ -7,17 +7,19 @@ import java.sql.SQLException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.github.cdimascio.dotenv.Dotenv;
+
 public class DatabaseConnection {
 	private static Connection connection = null;
 	private static final Logger logger = LoggerFactory.getLogger(DatabaseConnection.class);
 
 	static {
-//		Dotenv dotenv = Dotenv.configure().load();
+		Dotenv dotenv = Dotenv.configure().load();
 
 		// Access environment variables
-		String url = "jdbc:mysql://localhost:3306/team_sync";
-		String user = "root";
-		String password = "";
+		String url = dotenv.get("DATABASE_URL");
+		String user = dotenv.get("DB_USER");
+		String password = dotenv.get("DB_PASSWORD");
 
 		try {
 			// Attempt to connect to the database
