@@ -14,9 +14,14 @@
                     <div class="row">
                         <div class="col-sm-8"><h2>Project	 <b>Details</b></h2></div>
                         <div class="col-sm-4">
+	                        <div class="col-sm-4"><a href="/teamsync/project/create">Create new project</a></div>
                             <div class="search-box">
+                            <form action="/teamsync/project/search" >
+                            <button class="border-0">
                                 <i class="material-icons">&#xE8B6;</i>
-                                <input type="text" class="form-control" placeholder="Search&hellip;">
+                            </button>                            
+                                <input type="text" class="form-control" placeholder="Search&hellip;" name="q">
+                            </form>
                             </div>
                         </div>
                     </div>
@@ -43,9 +48,12 @@
                             <td>${project.endDate}</td>
                             <td>${project.status}</td>
                             <td>
-                                <a href="#" class="view" title="View" data-toggle="tooltip"><i class="material-icons">&#xE417;</i></a>
-                                <a href="project/edit?project_id=${project.id }" class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
-                                <a class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons" style="cursor: pointer;">&#xE872;</i></a>
+                                <a href="/teamsync/project/show?project_id=${project.id }" class="view" title="View" data-toggle="tooltip"><i class="material-icons">&#xE417;</i></a>
+                                <a href="/teamsync/project/edit?project_id=${project.id }" class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
+                                <form action="/teamsync/project/delete" method="post">   
+                                <input type="hidden" name="project_id" value="${project.id }"/>                             
+                                <button title="Delete" class="border-0 d-inline" data-toggle="tooltip"><i class="material-icons" style="cursor: pointer; display:inline;">&#xE872;</i></button>
+                                </form>
                             </td>
                         </tr>
                	</c:forEach>
