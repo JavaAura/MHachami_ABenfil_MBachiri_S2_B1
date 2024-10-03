@@ -1,0 +1,6 @@
+<urlrewrite>
+    <rule>
+        <from>^/project/$</from>
+        <to>/project</to>
+    </rule>
+</urlrewrite>
