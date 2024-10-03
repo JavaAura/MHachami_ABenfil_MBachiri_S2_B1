@@ -39,6 +39,26 @@
 		<servlet-name>ProjectServlet</servlet-name>
 		<url-pattern>/project/search</url-pattern>
 	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>ProjectServlet</servlet-name>
+		<url-pattern>/project/show</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>ProjectServlet</servlet-name>
+		<url-pattern>/project/update</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>ProjectServlet</servlet-name>
+		<url-pattern>/project/store</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>ProjectServlet</servlet-name>
+		<url-pattern>/project/delete</url-pattern>
+	</servlet-mapping>
 
 	
 	<filter>
