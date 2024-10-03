@@ -24,20 +24,20 @@ public class TaskServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
-//        response.setContentType("text/plain");
-//        PrintWriter out = response.getWriter();
-//        out.println("test");
         try {
-            if ("list".equals(action)) {
+            if ("add".equalsIgnoreCase(action)) {
+                request.getRequestDispatcher("views/tasks/add-form.jsp").forward(request, response);
+            } else if ("list".equalsIgnoreCase(action)) {
                 List<Task> tasks = taskRepository.getAllTasks();
                 request.setAttribute("tasks", tasks);
-                RequestDispatcher dispatcher = request.getRequestDispatcher("views/tasks/index.jsp");
+                RequestDispatcher dispatcher = request.getRequestDispatcher("views/tasks/task-list.jsp");
                 dispatcher.forward(request, response);
-            } else if ("edit".equals(action)) {
+            } else if ("edit".equalsIgnoreCase(action)) {
                 int id = Integer.parseInt(request.getParameter("id"));
                 Task task = taskRepository.getTaskById(id);
+                if (task == null) {response.sendRedirect(request.getContextPath() + "/error-404.jsp");return;}
                 request.setAttribute("task", task);
-                RequestDispatcher dispatcher = request.getRequestDispatcher("form.jsp");
+                RequestDispatcher dispatcher = request.getRequestDispatcher("views/tasks/edit-form.jsp");
                 dispatcher.forward(request, response);
             }
         } catch (SQLException e) {
@@ -64,6 +64,9 @@ public class TaskServlet extends HttpServlet {
                 task.setId(Integer.parseInt(request.getParameter("id")));
                 task.setTitle(request.getParameter("title"));
                 task.setDescription(request.getParameter("description"));
+                task.setStatus(TaskStatus.valueOf(request.getParameter("status")));
+                task.setPriority(Priority.valueOf(request.getParameter("priority")));
+                task.setDeadline(LocalDate.parse(request.getParameter("deadline")));
                 taskRepository.updateTask(task);
                 response.sendRedirect("tasks?action=list");
             } else if ("delete".equals(action)) {
