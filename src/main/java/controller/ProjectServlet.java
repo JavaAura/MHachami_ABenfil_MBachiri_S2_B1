@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import entities.Project;
 import service.Impl.ProjectServiceImpl;
+import utils.StatsHolder;
 
 public class ProjectServlet extends HttpServlet {
 
@@ -43,6 +44,9 @@ public class ProjectServlet extends HttpServlet {
 			break;
 		case "show":
 			show(req, resp);
+			break;
+		case "stats":
+			stats(req, resp);
 			break;
 		default:
 			index(req, resp);
@@ -192,6 +196,18 @@ public class ProjectServlet extends HttpServlet {
 		} catch (Exception e) {
 			req.setAttribute("errorMessage", e.getMessage());
 			this.getServletContext().getRequestDispatcher("/views/error-404.jsp").forward(req, resp);
+		}
+	}
+
+	protected void stats(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		String idParam = req.getParameter("project_id");
+		try {
+			StatsHolder statsHolder = projectService.getProjectStats(idParam);
+			req.setAttribute("statsHolder", statsHolder);
+			this.getServletContext().getRequestDispatcher("/views/project/stats.jsp").forward(req, resp);
+		} catch (Exception e) {
+			req.setAttribute("errorMessage", e.getMessage());
+			req.getRequestDispatcher("/views/error-404.jsp").forward(req, resp);
 		}
 	}
 }
