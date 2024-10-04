@@ -29,19 +29,28 @@ public class Input {
 	}
 
 	public LocalDate getLocalDate(String inputDate, boolean canBeAboveNow, String inputName) {
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		DateTimeFormatter primaryFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+		DateTimeFormatter fallbackFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		LocalDate now = LocalDate.now();
 
-		try {
-			LocalDate date = LocalDate.parse(inputDate, formatter);
+		inputDate = inputDate.trim();
 
-			if (canBeAboveNow || (!canBeAboveNow && date.isBefore(now))) {
-				return date;
-			} else {
-				throw new ValidationException(inputName + " Date must be before " + now);
+		LocalDate date;
+
+		try {
+			date = LocalDate.parse(inputDate, primaryFormatter);
+		} catch (DateTimeParseException e1) {
+			try {
+				date = LocalDate.parse(inputDate, fallbackFormatter);
+			} catch (DateTimeParseException e2) {
+				throw new ValidationException("Invalid " + inputName + " date format. Please use MM/DD/YYYY.");
 			}
-		} catch (DateTimeParseException e) {
-			throw new ValidationException("Invalid " + inputName + " date format. Please use DD/MM/YYYY.");
+		}
+
+		if (!canBeAboveNow || (canBeAboveNow && date.isAfter(now))) {
+			return date;
+		} else {
+			throw new ValidationException(inputName + " Date must be after " + now);
 		}
 	}
 

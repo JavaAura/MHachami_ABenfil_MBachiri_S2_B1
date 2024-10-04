@@ -3,12 +3,16 @@
 <layout:layout title="Project Form">
 
 	<div>
-	
+		<c:if test="${not empty errorMessage}">
+	        <div style="color: red; margin-bottom: 15px;">
+	            Error: ${errorMessage}
+	        </div>
+    	</c:if>
 		<form method="post" action="${ isUpdate ? 'update' : 'store' }">
 		  <div class="form-row">
 		    <div class="form-group col-md-6">
-		      <label for="inputEmail4">Project Name</label>
-		      <input type="text" name="name" value="${isUpdate ? project.name : ''}" class="form-control" id="inputEmail4" placeholder="Project Name">
+		      <label for="inputName">Project Name</label>
+		      <input type="text" name="name" value="${isUpdate ? project.name : ''}" class="form-control" id="inputName" placeholder="Project Name">
 		    </div>
 		    <div class="form-group col-md-6">
 		      <label for="inputPassword4">Description</label>
