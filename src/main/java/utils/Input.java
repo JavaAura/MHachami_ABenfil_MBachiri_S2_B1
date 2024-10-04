@@ -6,29 +6,29 @@ import java.time.format.DateTimeParseException;
 
 public class Input {
 
-	public int validateNum(String num) {
+	public int validateNum(String num, String inputName) {
 		String regex = "^-?\\d+(\\.\\d+)?$";
 		if (num.length() == 0 || num == null || !num.matches(regex))
-			throw new ValidationException("Number is Invalid");
+			throw new ValidationException(inputName + " is Invalid");
 
 		return Integer.parseInt(num);
 
 	}
 
-	public String validateStr(String input) {
+	public String validateStr(String input, String inputName) {
 
 		if (input == null || input.trim().isEmpty()) {
-			throw new ValidationException("The input is null or empty");
+			throw new ValidationException("The " + inputName + " is null or empty");
 		}
 
 		if (!input.matches("[a-zA-Z ]+")) {
-			throw new ValidationException("The input contains invalid characters");
+			throw new ValidationException("The " + inputName + " contains invalid characters");
 		}
 
 		return input;
 	}
 
-	public LocalDate getLocalDate(String inputDate, boolean canBeAboveNow) {
+	public LocalDate getLocalDate(String inputDate, boolean canBeAboveNow, String inputName) {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 		LocalDate now = LocalDate.now();
 
@@ -38,10 +38,10 @@ public class Input {
 			if (canBeAboveNow || (!canBeAboveNow && date.isBefore(now))) {
 				return date;
 			} else {
-				throw new ValidationException("Date must be before " + now);
+				throw new ValidationException(inputName + " Date must be before " + now);
 			}
 		} catch (DateTimeParseException e) {
-			throw new ValidationException("Invalid date format. Please use DD/MM/YYYY.");
+			throw new ValidationException("Invalid " + inputName + " date format. Please use DD/MM/YYYY.");
 		}
 	}
 
