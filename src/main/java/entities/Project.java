@@ -23,6 +23,16 @@ public class Project {
 		setStatus(status);
 	}
 
+	public Project(int id, String name, String discription, LocalDate startDate, LocalDate endDate,
+			ProjectStatus status) {
+		setId(id);
+		setName(name);
+		setDescription(discription);
+		setStartDate(startDate);
+		setEndDate(endDate);
+		setStatus(status);
+	}
+
 	public Project(int id) {
 		setId(id);
 	}

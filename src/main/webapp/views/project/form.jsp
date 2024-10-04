@@ -3,7 +3,11 @@
 <layout:layout title="Project Form">
 
 	<div>
-	
+		<c:if test="${not empty errorMessage}">
+	        <div style="color: red; margin-bottom: 15px;">
+	            Error: ${errorMessage}
+	        </div>
+    	</c:if>
 		<form method="post" action="${ isUpdate ? 'update' : 'store' }">
 		  <div class="form-row">
 		    <div class="form-group col-md-6">
