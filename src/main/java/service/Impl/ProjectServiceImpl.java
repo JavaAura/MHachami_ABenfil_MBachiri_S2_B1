@@ -2,7 +2,6 @@ package service.Impl;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.HashMap;
 import java.util.List;
 
 import javax.xml.bind.ValidationException;
@@ -12,6 +11,7 @@ import enums.ProjectStatus;
 import repository.Impl.ProjectRepositoryImpl;
 import service.ProjectService;
 import utils.Input;
+import utils.StatsHolder;
 
 public class ProjectServiceImpl implements ProjectService {
 
@@ -129,8 +129,9 @@ public class ProjectServiceImpl implements ProjectService {
 	}
 
 	@Override
-	public HashMap<Integer, Integer> getProjectStats(String id) {
+	public StatsHolder getProjectStats(String id) throws ValidationException {
 		int projectId = validator.validateNum(id, "Id");
-		return null;
+
+		return repository.getStats(projectId);
 	}
 }
