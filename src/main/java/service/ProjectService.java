@@ -1,12 +1,12 @@
 package service;
 
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.List;
 
 import javax.xml.bind.ValidationException;
 
 import entities.Project;
+import utils.StatsHolder;
 
 public interface ProjectService {
 
@@ -24,7 +24,7 @@ public interface ProjectService {
 
 	public List<Project> searchForProject(String title) throws SQLException, ValidationException;
 
-	public HashMap<Integer, Integer> getProjectStats(String id);
+	public StatsHolder getProjectStats(String id) throws ValidationException;
 
 	long getProjectCount();
 }
