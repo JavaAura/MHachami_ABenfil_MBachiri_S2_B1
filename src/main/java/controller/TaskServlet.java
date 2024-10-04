@@ -18,14 +18,20 @@ public class TaskServlet extends HttpServlet {
     private TaskRepositoryImpl taskRepository;
 
     public void init() {
-        taskRepository = new TaskRepositoryImpl();
+        try {
+            taskRepository = new TaskRepositoryImpl();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
         try {
-            if ("add".equalsIgnoreCase(action)) {
+            if (action == null || action.isEmpty()) {
+                response.sendRedirect("tasks?action=list");
+            } else if ("add".equalsIgnoreCase(action)) {
                 request.getRequestDispatcher("views/tasks/add-form.jsp").forward(request, response);
             } else if ("list".equalsIgnoreCase(action)) {
                 List<Task> tasks = taskRepository.getAllTasks();
