@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib prefix="layout" tagdir="/WEB-INF/tags" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
@@ -60,17 +61,31 @@
                     </tbody>
                 </table>
                 <div class="clearfix">
-                    <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
-                    <ul class="pagination">
-                        <li class="page-item disabled"><a href="#"><i class="fa fa-angle-double-left"></i></a></li>
-                        <li class="page-item"><a href="#" class="page-link">1</a></li>
-                        <li class="page-item"><a href="#" class="page-link">2</a></li>
-                        <li class="page-item active"><a href="#" class="page-link">3</a></li>
-                        <li class="page-item"><a href="#" class="page-link">4</a></li>
-                        <li class="page-item"><a href="#" class="page-link">5</a></li>
-                        <li class="page-item"><a href="#" class="page-link"><i class="fa fa-angle-double-right"></i></a></li>
-                    </ul>
-                </div>
+				    <div class="hint-text">Showing <b>${projects.size()}</b> out of <b>${totalProjects}</b> entries</div>
+				    <ul class="pagination">
+				        <c:if test="${page > 1}">
+				            <li class="page-item">
+				                <a href="/teamsync/project?page=${page - 1}" class="page-link">
+				                    <i class="fa fa-angle-double-left"></i>
+				                </a>
+				            </li>
+				        </c:if>
+				        
+				        <c:forEach begin="1" end="${pageNumbers}" var="pageNum">
+				            <li class="page-item ${pageNum == page ? 'active' : ''}">
+				                <a href="/teamsync/project?page=${pageNum}" class="page-link">${pageNum}</a>
+				            </li>
+				        </c:forEach>
+				        
+				        <c:if test="${page < pageNumbers}">
+				            <li class="page-item">
+				                <a href="/teamsync/project?page=${page + 1}" class="page-link">
+				                    <i class="fa fa-angle-double-right"></i>
+				                </a>
+				            </li>
+				        </c:if>
+				    </ul>
+				</div>
             </div>
         </div>        
     </div>     

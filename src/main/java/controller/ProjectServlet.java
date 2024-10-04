@@ -60,11 +60,13 @@ public class ProjectServlet extends HttpServlet {
 		req.setAttribute("projects", projects);
 
 		long totalProjects = projectService.getProjectCount();
-		long pageSize = 5;
-		long pageNumber = (totalProjects + pageSize - 1) / pageSize;
-		req.setAttribute("pageNumbers", pageNumber);
+		int pageSize = 5;
+		long pageNumbers = (totalProjects + pageSize - 1) / pageSize;
 
+		req.setAttribute("totalProjects", totalProjects);
 		req.setAttribute("page", page);
+		req.setAttribute("pageNumbers", pageNumbers);
+		req.setAttribute("pageSize", pageSize);
 		this.getServletContext().getRequestDispatcher("/views/project/index.jsp").forward(req, resp);
 	}
 
