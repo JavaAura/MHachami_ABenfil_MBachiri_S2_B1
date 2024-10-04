@@ -11,7 +11,7 @@ public interface ProjectService {
 
 	public Project getProject(String id);
 
-	public List<Project> getAllProjects();
+	public List<Project> getAllProjects(int page);
 
 	public Project createProject(String name, String description, LocalDate startDate, LocalDate endDate);
 
@@ -23,4 +23,6 @@ public interface ProjectService {
 	public List<Project> searchForProject(String title) throws SQLException;
 
 	public HashMap<Integer, Integer> getProjectStats(int id);
+
+	long getProjectCount();
 }

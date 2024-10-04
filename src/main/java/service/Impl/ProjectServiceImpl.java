@@ -28,10 +28,29 @@ public class ProjectServiceImpl implements ProjectService {
 	}
 
 	@Override
-	public List<Project> getAllProjects() {
+	public long getProjectCount() {
+		try {
+			return repository.getCount();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return 0;
+	}
+
+	@Override
+	public List<Project> getAllProjects(int page) {
+
+		int from = 0;
+		int length = 5;
+
+		if (page > 1) {
+			from = length * (page - 1);
+		}
+
 		List<Project> projects = null;
 		try {
-			projects = repository.read();
+			projects = repository.read(from, length);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

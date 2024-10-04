@@ -8,7 +8,7 @@ import entities.Project;
 
 public interface ProjectRepository {
 
-	List<Project> read() throws SQLException;
+	List<Project> read(int from, int length) throws SQLException;
 
 	Project readById(int id) throws SQLException;
 
@@ -21,4 +21,6 @@ public interface ProjectRepository {
 	List<Project> searchByTitle(String title) throws SQLException;
 
 	public HashMap<Integer, Integer> getStats(int id);
+
+	Long getCount() throws SQLException;
 }
