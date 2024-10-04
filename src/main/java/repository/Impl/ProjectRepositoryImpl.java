@@ -29,11 +29,13 @@ public class ProjectRepositoryImpl implements ProjectRepository {
 	}
 
 	@Override
-	public List<Project> read() throws SQLException {
-		String query = "SELECT * FROM projects";
+	public List<Project> read(int from, int length) throws SQLException {
+		String query = "SELECT * FROM projects LIMIT ?, ?";
 
-		Statement statement = connection.createStatement();
-		ResultSet rs = statement.executeQuery(query);
+		PreparedStatement pstmt = connection.prepareStatement(query);
+		pstmt.setInt(1, from);
+		pstmt.setInt(2, length);
+		ResultSet rs = pstmt.executeQuery();
 		List<Project> projects = new ArrayList<>();
 		Project project;
 
@@ -42,6 +44,21 @@ public class ProjectRepositoryImpl implements ProjectRepository {
 			projects.add(project);
 		}
 		return projects;
+	}
+
+	@Override
+	public Long getCount() throws SQLException {
+		String query = "SELECT COUNT( * ) as count FROM projects";
+
+		Statement stmt = connection.createStatement();
+
+		ResultSet rs = stmt.executeQuery(query);
+		long count = 0;
+
+		if (rs.next()) {
+			count = rs.getLong("count");
+		}
+		return count;
 	}
 
 	@Override
