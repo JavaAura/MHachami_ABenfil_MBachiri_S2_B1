@@ -14,6 +14,8 @@
                         <div class="body">
                             <h3>${ project.name }</h3>
                             <p>${ project.description }</p>
+                            <p>Members: ${ memberCount } </p>
+                            <p>tasks: ${ taskCount } </p>
                         </div>                                               
                     </div>
                 </div>
