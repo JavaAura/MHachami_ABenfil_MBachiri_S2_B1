@@ -7,13 +7,13 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import entities.Project;
 import enums.ProjectStatus;
 import repository.ProjectRepository;
 import utils.DatabaseConnection;
+import utils.StatsHolder;
 
 public class ProjectRepositoryImpl implements ProjectRepository {
 	private Connection connection;
@@ -142,7 +142,34 @@ public class ProjectRepositoryImpl implements ProjectRepository {
 	}
 
 	@Override
-	public HashMap<Integer, Integer> getStats(int id) {
-		return null;
+	public StatsHolder getStats(int id) {
+		String memberCountQuery = "SELECT COUNT(DISTINCT tm.member_id) AS member_count FROM team_projects tp"
+				+ "JOIN team_members tm ON tp.team_id = tm.team_id WHERE tp.project_id = ?";
+		String taskCountQuery = "SELECT COUNT(DISTINCT mt.task_id) AS task_count FROM team_projects tp"
+				+ "JOIN team_members tm ON tp.team_id = tm.team_id"
+				+ "JOIN member_tasks mt ON tm.member_id = mt.member_id WHERE tp.project_id = ?";
+		StatsHolder statsHolder = new StatsHolder();
+
+		try {
+			PreparedStatement pstmt = connection.prepareStatement(memberCountQuery);
+			pstmt.setInt(1, id);
+			ResultSet rs = pstmt.executeQuery();
+			statsHolder.setMemberCount(rs.getInt("member_count"));
+			rs.close();
+			pstmt.close();
+
+			pstmt = connection.prepareStatement(taskCountQuery);
+			pstmt.setInt(1, id);
+			rs = pstmt.executeQuery();
+			statsHolder.setTaskCount(rs.getInt("task_count"));
+			rs.close();
+			pstmt.close();
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return statsHolder;
 	}
 }
