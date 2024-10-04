@@ -10,6 +10,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.bind.ValidationException;
 
 import entities.Project;
 import service.Impl.ProjectServiceImpl;
@@ -44,9 +45,6 @@ public class ProjectServlet extends HttpServlet {
 			break;
 		case "show":
 			show(req, resp);
-			break;
-		case "stats":
-			stats(req, resp);
 			break;
 		default:
 			index(req, resp);
@@ -169,14 +167,21 @@ public class ProjectServlet extends HttpServlet {
 
 		try {
 			Project project = projectService.getProject(id);
+
 			if (project == null) {
 				req.setAttribute("errorMessage", "Incorrect ID");
 				req.getRequestDispatcher("/views/error-404.jsp").forward(req, resp);
 				return;
 			}
+
+			StatsHolder statsHolder = projectService.getProjectStats(id);
+
+			req.setAttribute("memberCount", statsHolder.getMemberCount());
+			req.setAttribute("taskCount", statsHolder.getTakCount());
 			req.setAttribute("project", project);
+
 			this.getServletContext().getRequestDispatcher("/views/project/detail.jsp").forward(req, resp);
-		} catch (Exception e) {
+		} catch (ValidationException e) {
 			req.setAttribute("errorMessage", e.getMessage());
 			req.getRequestDispatcher("/views/error-404.jsp").forward(req, resp);
 		}
@@ -196,18 +201,6 @@ public class ProjectServlet extends HttpServlet {
 		} catch (Exception e) {
 			req.setAttribute("errorMessage", e.getMessage());
 			this.getServletContext().getRequestDispatcher("/views/error-404.jsp").forward(req, resp);
-		}
-	}
-
-	protected void stats(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		String idParam = req.getParameter("project_id");
-		try {
-			StatsHolder statsHolder = projectService.getProjectStats(idParam);
-			req.setAttribute("statsHolder", statsHolder);
-			this.getServletContext().getRequestDispatcher("/views/project/stats.jsp").forward(req, resp);
-		} catch (Exception e) {
-			req.setAttribute("errorMessage", e.getMessage());
-			req.getRequestDispatcher("/views/error-404.jsp").forward(req, resp);
 		}
 	}
 }

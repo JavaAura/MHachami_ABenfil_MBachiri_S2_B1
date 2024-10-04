@@ -143,27 +143,35 @@ public class ProjectRepositoryImpl implements ProjectRepository {
 
 	@Override
 	public StatsHolder getStats(int id) {
-		String memberCountQuery = "SELECT COUNT(DISTINCT tm.member_id) AS member_count FROM team_projects tp"
+		String memberCountQuery = "SELECT COUNT(DISTINCT tm.member_id) AS member_count FROM team_projects tp "
 				+ "JOIN team_members tm ON tp.team_id = tm.team_id WHERE tp.project_id = ?";
-		String taskCountQuery = "SELECT COUNT(DISTINCT mt.task_id) AS task_count FROM team_projects tp"
-				+ "JOIN team_members tm ON tp.team_id = tm.team_id"
+
+		String taskCountQuery = "SELECT COUNT(DISTINCT mt.task_id) AS task_count FROM team_projects tp "
+				+ "JOIN team_members tm ON tp.team_id = tm.team_id "
 				+ "JOIN member_tasks mt ON tm.member_id = mt.member_id WHERE tp.project_id = ?";
+
 		StatsHolder statsHolder = new StatsHolder();
 
 		try {
-			PreparedStatement pstmt = connection.prepareStatement(memberCountQuery);
-			pstmt.setInt(1, id);
-			ResultSet rs = pstmt.executeQuery();
-			statsHolder.setMemberCount(rs.getInt("member_count"));
-			rs.close();
-			pstmt.close();
+			PreparedStatement memberPstmt = connection.prepareStatement(memberCountQuery);
+			memberPstmt.setInt(1, id);
+			ResultSet memberRs = memberPstmt.executeQuery();
 
-			pstmt = connection.prepareStatement(taskCountQuery);
-			pstmt.setInt(1, id);
-			rs = pstmt.executeQuery();
-			statsHolder.setTaskCount(rs.getInt("task_count"));
-			rs.close();
-			pstmt.close();
+			if (memberRs.next())
+				statsHolder.setMemberCount(memberRs.getInt("member_count"));
+
+			memberRs.close();
+			memberPstmt.close();
+
+			PreparedStatement taskPstmt = connection.prepareStatement(taskCountQuery);
+			taskPstmt.setInt(1, id);
+			ResultSet taskRs = taskPstmt.executeQuery();
+
+			if (taskRs.next())
+				statsHolder.setTaskCount(taskRs.getInt("task_count"));
+
+			taskRs.close();
+			taskPstmt.close();
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

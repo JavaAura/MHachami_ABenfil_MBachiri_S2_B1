@@ -13,7 +13,7 @@ public class StatsHolder {
 		this.memberCount = memberCount;
 	}
 
-	public int getTaksCount() {
+	public int getTakCount() {
 		return taskCount;
 	}
 
