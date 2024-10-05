@@ -14,6 +14,7 @@ import javax.xml.bind.ValidationException;
 
 import entities.Project;
 import service.Impl.ProjectServiceImpl;
+import utils.ProjectStatusUtil;
 import utils.StatsHolder;
 
 public class ProjectServlet extends HttpServlet {
@@ -55,7 +56,7 @@ public class ProjectServlet extends HttpServlet {
 	protected void index(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String pageString = req.getParameter("page");
 		int page = 1;
-		if (pageString != null)
+		if (pageString != null && pageString.matches("-?\\d+(\\.\\d+)?"))
 			page = Integer.parseInt(pageString);
 
 		List<Project> projects = projectService.getAllProjects(page);
@@ -96,7 +97,9 @@ public class ProjectServlet extends HttpServlet {
 			Project project = projectService.createProject(name, description, startDate, endDate);
 			resp.sendRedirect("/teamsync/project");
 		} catch (Exception e) {
-			req.setAttribute("errorMessage", e.getMessage());
+			String errorMessage = e.getMessage();
+			LOGGER.warning("error: " + errorMessage);
+			req.setAttribute("errorMessage", errorMessage);
 			RequestDispatcher dispatcher = req.getRequestDispatcher("/views/project/form.jsp");
 			dispatcher.forward(req, resp);
 		}
@@ -117,7 +120,9 @@ public class ProjectServlet extends HttpServlet {
 			LOGGER.info("Project updated successfully, redirecting");
 			resp.sendRedirect("/teamsync/project");
 		} catch (Exception e) {
-			req.setAttribute("errorMessage", e.getMessage());
+			String errorMessage = e.getMessage();
+			LOGGER.warning("error: " + errorMessage);
+			req.setAttribute("errorMessage", errorMessage);
 			edit(req, resp);
 		}
 	}
@@ -138,7 +143,9 @@ public class ProjectServlet extends HttpServlet {
 			}
 			resp.sendRedirect("/teamsync/project");
 		} catch (Exception e) {
-			req.setAttribute("errorMessage", e.getMessage());
+			String errorMessage = e.getMessage();
+			LOGGER.warning("error: " + errorMessage);
+			req.setAttribute("errorMessage", errorMessage);
 			req.getRequestDispatcher("/views/error-404.jsp").forward(req, resp);
 		}
 	}
@@ -157,7 +164,9 @@ public class ProjectServlet extends HttpServlet {
 			req.setAttribute("isUpdate", true);
 			this.getServletContext().getRequestDispatcher("/views/project/form.jsp").forward(req, resp);
 		} catch (Exception e) {
-			req.setAttribute("errorMessage", e.getMessage());
+			String errorMessage = e.getMessage();
+			LOGGER.warning("error: " + errorMessage);
+			req.setAttribute("errorMessage", errorMessage);
 			req.getRequestDispatcher("/views/error-404.jsp").forward(req, resp);
 		}
 	}
@@ -180,9 +189,13 @@ public class ProjectServlet extends HttpServlet {
 			req.setAttribute("taskCount", statsHolder.getTakCount());
 			req.setAttribute("project", project);
 
+			req.setAttribute("statusUtil", new ProjectStatusUtil());
+
 			this.getServletContext().getRequestDispatcher("/views/project/detail.jsp").forward(req, resp);
 		} catch (ValidationException e) {
-			req.setAttribute("errorMessage", e.getMessage());
+			String errorMessage = e.getMessage();
+			LOGGER.warning("error: " + errorMessage);
+			req.setAttribute("errorMessage", errorMessage);
 			req.getRequestDispatcher("/views/error-404.jsp").forward(req, resp);
 		}
 	}
@@ -197,9 +210,12 @@ public class ProjectServlet extends HttpServlet {
 		try {
 			List<Project> projects = projectService.searchForProject(title);
 			req.setAttribute("projects", projects);
+			req.setAttribute("title", title);
 			this.getServletContext().getRequestDispatcher("/views/project/index.jsp").forward(req, resp);
 		} catch (Exception e) {
-			req.setAttribute("errorMessage", e.getMessage());
+			String errorMessage = e.getMessage();
+			LOGGER.warning("error: " + errorMessage);
+			req.setAttribute("errorMessage", errorMessage);
 			this.getServletContext().getRequestDispatcher("/views/error-404.jsp").forward(req, resp);
 		}
 	}

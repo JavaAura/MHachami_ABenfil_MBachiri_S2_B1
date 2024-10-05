@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import entities.Project;
 import enums.ProjectStatus;
@@ -17,20 +18,21 @@ import utils.StatsHolder;
 
 public class ProjectRepositoryImpl implements ProjectRepository {
 	private Connection connection;
+	private static final Logger LOGGER = Logger.getLogger(ProjectRepositoryImpl.class.getName());
 
 	public ProjectRepositoryImpl() {
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			String errorMessage = e.getMessage();
+			LOGGER.warning("error: " + errorMessage);
 		}
 		this.connection = DatabaseConnection.getConnection();
 	}
 
 	@Override
 	public List<Project> read(int from, int length) throws SQLException {
-		String query = "SELECT * FROM projects LIMIT ?, ?";
+		String query = "SELECT * FROM projects ORDER BY id DESC LIMIT ?, ?";
 
 		PreparedStatement pstmt = connection.prepareStatement(query);
 		pstmt.setInt(1, from);
@@ -174,8 +176,8 @@ public class ProjectRepositoryImpl implements ProjectRepository {
 			taskPstmt.close();
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			String errorMessage = e.getMessage();
+			LOGGER.warning("error: " + errorMessage);
 		}
 
 		return statsHolder;
