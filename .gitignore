@@ -33,7 +33,6 @@ Thumbs.db
 # Ignore compiled Java files
 *.class
 *.jar
-*.war
 *.ear
 
 # Ignore Eclipse working sets
