@@ -43,15 +43,16 @@ public class Input {
 			try {
 				date = LocalDate.parse(inputDate, fallbackFormatter);
 			} catch (DateTimeParseException e2) {
-				throw new ValidationException("Invalid " + inputName + " date format. Please use MM/DD/YYYY.");
+				throw new ValidationException(
+						"Invalid " + inputName + " date format. Please use MM/DD/YYYY or YYYY-MM-DD.");
 			}
 		}
 
-		if (!canBeAboveNow || (canBeAboveNow && date.isAfter(now))) {
-			return date;
-		} else {
-			throw new ValidationException(inputName + " Date must be after " + now);
+		if (canBeAboveNow && date.isBefore(now)) {
+			throw new ValidationException(inputName + " date must be today or a future date.");
 		}
+
+		return date;
 	}
 
 	public String getPhone(String inputPhone) {
