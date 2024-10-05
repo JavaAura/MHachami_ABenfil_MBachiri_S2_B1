@@ -28,6 +28,11 @@
 	</style>
 
     <div class="container">
+    					<c:if test="${not empty errorMessage}">
+						    <div id="alert" class="alert alert-danger" style="color: red; margin-top: 15px;" role="alert">
+							  ${ errorMessage }
+							</div>
+    					</c:if>
         <div class="table-responsive">
             <div class="table-wrapper">
                 <div class="table-title">
@@ -35,12 +40,7 @@
 					    <div class="col-sm-6">
 					        <h2><a href="/teamsync/project/">Project</a> <b>List</b></h2>
 					    </div>
-					    <div class="col-sm-3">
-					        <a href="/teamsync/project/create" class="btn btn-success btn-block"
-					           style="background-color: #28a745; border: none; color: white; padding: 5px 1px; border-radius: 5px; text-align: center; text-decoration: none;">
-					            Create New Project
-					        </a>
-					    </div>
+					    
 					    <div class="col-sm-3">
 					        <div class="search-box">
 					            <form action="/teamsync/project/search">
@@ -55,6 +55,12 @@
 					                </c:choose>
 					            </form>
 					        </div>
+					    </div>
+					    <div class="col-sm-3">
+					        <a href="/teamsync/project/create" class="btn btn-success btn-block"
+					           style="background-color: #28a745; border: none; color: white; padding: 5px 1px; border-radius: 5px; text-align: center; text-decoration: none;">
+					            Create New Project
+					        </a>
 					    </div>
 					</div>
                 </div>
@@ -128,5 +134,5 @@
                               
             </div>
         </div>        
-    </div>     
+    </div>   
 </layout:layout>
