@@ -1,14 +1,19 @@
 package controller;
 
+import entities.Member;
 import entities.Task;
 import enums.Priority;
 import enums.TaskStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import repository.Impl.TaskRepositoryImpl;
+import repository.Impl.TeamRepositoryImpl;
 
 import java.io.*;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Stream;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.*;
@@ -16,6 +21,7 @@ import javax.servlet.annotation.*;
 
 public class TaskServlet extends HttpServlet {
     private TaskRepositoryImpl taskRepository;
+    private static final Logger logger = LoggerFactory.getLogger(TaskServlet.class);
 
     public void init() {
         try {
@@ -41,9 +47,27 @@ public class TaskServlet extends HttpServlet {
             } else if ("edit".equalsIgnoreCase(action)) {
                 int id = Integer.parseInt(request.getParameter("id"));
                 Task task = taskRepository.getTaskById(id);
-                if (task == null) {response.sendRedirect(request.getContextPath() + "/error-404.jsp");return;}
+                if (task.getId() == 0) {response.sendRedirect(request.getContextPath() + "/error-404.jsp");return;}
                 request.setAttribute("task", task);
                 RequestDispatcher dispatcher = request.getRequestDispatcher("views/tasks/edit-form.jsp");
+                dispatcher.forward(request, response);
+            } else if ("assign".equalsIgnoreCase(action)) {
+                int id = Integer.parseInt(request.getParameter("id"));
+                Task task = taskRepository.getTaskById(id);
+                if (task.getId() == 0) {response.sendRedirect(request.getContextPath() + "/error-404.jsp");return;}
+                TeamRepositoryImpl teamRepository = new TeamRepositoryImpl();
+                List<Member> members = teamRepository.getMembers(); // assuming 'getMembers' returns all members in teams
+                request.setAttribute("members", members);
+                request.setAttribute("task", task);
+                RequestDispatcher dispatcher = request.getRequestDispatcher("views/tasks/assign-member.jsp");
+                dispatcher.forward(request, response);
+            } else if ("details".equalsIgnoreCase(action)) {
+                int id = Integer.parseInt(request.getParameter("id"));
+                Task task = taskRepository.getTaskById(id);
+                logger.info(String.valueOf(task.getId()));
+                if (task.getId() == 0) {response.sendRedirect(request.getContextPath() + "/error-404.jsp");return;}
+                request.setAttribute("task", task);
+                RequestDispatcher dispatcher = request.getRequestDispatcher("views/tasks/details.jsp");
                 dispatcher.forward(request, response);
             }
         } catch (SQLException e) {
@@ -78,6 +102,12 @@ public class TaskServlet extends HttpServlet {
             } else if ("delete".equals(action)) {
                 int id = Integer.parseInt(request.getParameter("id"));
                 taskRepository.deleteTaskById(id);
+                response.sendRedirect("tasks?action=list");
+            } else if ("assign".equalsIgnoreCase(action)) {
+                int taskId = Integer.parseInt(request.getParameter("task_id"));
+                String[] memberIdsStr = request.getParameterValues("members_id[]");
+                int[] membersIds =  Stream.of(memberIdsStr).mapToInt(Integer::parseInt).toArray();
+                taskRepository.assignToMembers(taskId, membersIds);
                 response.sendRedirect("tasks?action=list");
             }
         } catch (SQLException e) {
