@@ -82,13 +82,13 @@ public class TaskRepositoryImpl implements TaskRepository {
                 task.setDeadline(rs.getDate("deadline").toLocalDate());
                 do {
                     int memberId = rs.getInt("member_id");
-                    if (memberId != 0) { // Check if member_id is not null
+                    if (memberId != 0) { // check if member_id is not null
                         Member member = new Member();
-                        member.setId(memberId);
+                        member.setId((long) memberId);
                         member.setFirstName(rs.getString("first_name"));
                         member.setSecondName(rs.getString("last_name"));
                         member.setEmail(rs.getString("email"));
-                        member.setUserRole(Role.valueOf(rs.getString("role")));
+                        member.setUserRole(Role.valueOf(rs.getString("role").toUpperCase()));
                         assignedMembers.add(member);
                     }
                 } while (rs.next());
@@ -138,6 +138,42 @@ public class TaskRepositoryImpl implements TaskRepository {
             }
         }
     }
+
+    public int getTaskCount() throws SQLException {
+        String query = "SELECT COUNT(*) FROM tasks";
+        try (PreparedStatement preparedStatement = conn.prepareStatement(query)) {
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getInt(1);
+            }
+        }
+        return 0;
+    }
+
+    public List<Task> getTasksByPage(int offset, int noOfRecords) throws SQLException {
+        List<Task> tasks = new ArrayList<>();
+        String query = "SELECT * FROM tasks LIMIT ? OFFSET ?";
+
+        try (PreparedStatement preparedStatement = conn.prepareStatement(query)) {
+            preparedStatement.setInt(1, noOfRecords);
+            preparedStatement.setInt(2, offset);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                Task task = new Task();
+                task.setId(resultSet.getInt("id"));
+                task.setTitle(resultSet.getString("title"));
+                task.setDescription(resultSet.getString("description"));
+                task.setPriority(Priority.valueOf(resultSet.getString("priority").toUpperCase()));
+                task.setStatus(TaskStatus.valueOf(resultSet.getString("status").toUpperCase()));
+                task.setCreationDate(resultSet.getDate("creation_date").toLocalDate());
+                task.setDeadline(resultSet.getDate("deadline").toLocalDate());
+                tasks.add(task);
+            }
+        }
+        return tasks;
+    }
+
 
     private void loadDriver(){
         try {

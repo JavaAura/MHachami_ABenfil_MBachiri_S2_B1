@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import repository.Impl.TaskRepositoryImpl;
 import repository.Impl.TeamRepositoryImpl;
+import utils.Input;
 
 import java.io.*;
 import java.sql.SQLException;
@@ -22,6 +23,7 @@ import javax.servlet.annotation.*;
 public class TaskServlet extends HttpServlet {
     private TaskRepositoryImpl taskRepository;
     private static final Logger logger = LoggerFactory.getLogger(TaskServlet.class);
+    private Input input = new Input();
 
     public void init() {
         try {
@@ -33,6 +35,11 @@ public class TaskServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int currentPage = 1;
+        int recordsPerPage = 5;
+        if (request.getParameter("page") != null) {
+            currentPage = Integer.parseInt(request.getParameter("page"));
+        }
         String action = request.getParameter("action");
         try {
             if (action == null || action.isEmpty()) {
@@ -40,8 +47,16 @@ public class TaskServlet extends HttpServlet {
             } else if ("add".equalsIgnoreCase(action)) {
                 request.getRequestDispatcher("views/tasks/add-form.jsp").forward(request, response);
             } else if ("list".equalsIgnoreCase(action)) {
-                List<Task> tasks = taskRepository.getAllTasks();
+                int totalRecords = taskRepository.getTaskCount(); // get total task count
+                int start = (currentPage - 1) * recordsPerPage;
+                List<Task> tasks = taskRepository.getTasksByPage(start, recordsPerPage);
+
+                int totalPages = (int) Math.ceil((double) totalRecords / recordsPerPage);
+
                 request.setAttribute("tasks", tasks);
+                request.setAttribute("currentPage", currentPage);
+                request.setAttribute("totalPages", totalPages);
+
                 RequestDispatcher dispatcher = request.getRequestDispatcher("views/tasks/task-list.jsp");
                 dispatcher.forward(request, response);
             } else if ("edit".equalsIgnoreCase(action)) {
