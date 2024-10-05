@@ -38,6 +38,6 @@
     <p>&copy; 2024 My Website</p>
 </footer>
 
-    <script src="/teamsync/script/alertHandler.js"></script>
+    <script src="${pageContext.request.contextPath}/script/alertHandler.js"></script>
 </body>
 </html>
