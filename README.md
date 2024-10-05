@@ -4,9 +4,13 @@
 
 TeamSync is a web application built using Java, deployed on Tomcat, and connected to a MySQL database. This application is designed for managing team tasks and resources effectively.
 
+## Figma Design
+
+Check out the design for TeamSync on [Figma](https://www.figma.com/design/YwXTUwAGHlm5Y6uJRuBAwn/Teamsync?node-id=0-1&t=DEkDK80d7DLxqeOx-1).
+
 ## Project Structure
 
-
+(Include details about the structure here)
 
 ## Prerequisites
 
@@ -16,7 +20,7 @@ TeamSync is a web application built using Java, deployed on Tomcat, and connecte
 
 ## Configuration
 
-Before running the application, ensure the following configuration parameters in the .env
+Before running the application, ensure the following configuration parameters in the `.env` file:
 
 - **Database Configuration**:
   - `DB_HOST`: Set to `mysql` (service name).
@@ -31,31 +35,35 @@ To build and run the application using Docker and Docker Compose, follow these s
 
 1. **Clone the Repository**:
    ```bash
-   git https://github.com/JavaAura/MHachami_ABenfil_MBachiri_S2_B1.git
+   git clone https://github.com/JavaAura/MHachami_ABenfil_MBachiri_S2_B1.git
    cd TeamSync
-   
+   ```
+
 2. **Build the Application**:
    ```bash
    mvn clean package
+   ```
 
 3. **Run Docker Compose**:
-	```bash
- 	 docker-compose up --build
-Acces to the applicatio via http://localhost:8086/teamsync
-   
- 
+   ```bash
+   docker-compose up --build
+   ```
+
+Access the application via `http://localhost:8086/teamsync`.
+
 ## Gitflow
-Our workflow is based on using standards, obviously branches and tags of versions.
-We do have Branches as following:
-<ul>
-  <li>main : For current developments.</li>
-  <li>feature/xxxx : For the new features related to app. the name of branch must starts with prefix "feature/" and tracks origin/main, and "xxx" is the significant title composed of the number of ticket and short brief title.</li>
-  <li>fix/xxxx : Same as features, but this for bugs related monitored on develop, uat and staging branch, it must tracks origion/develop also and "xxx" as explained previously.</li>
-  <li>hotfix/xxxx : Same as previous, but the difference here is it must tracks main, because it is related to urgent and hot bugs monitored on the production.</li>
-</ul>
 
-Working progress must be committed and pushed every day.
-If work is done on feature/xxxx or fix/xxxx to develop, you have to initialize Merge Request using Githu UI. From your branch to develop.
-The title of the Merge Request must be as this : [FEATURE|FIX][FRONTEND|BACKEND] : Some comments.
+Our workflow is based on using standards, with branches and tags for versions. We have the following branches:
 
-If your Merge Request is still in progress you can add Draft: prefix to begining of title of MR.
+- `main`: For current developments.
+- `feature/xxxx`: For new features related to the app. The branch name must start with the prefix "feature/" and track `origin/main`, with "xxx" representing a significant title, composed of the ticket number and a short brief.
+- `fix/xxxx`: Similar to features, but for bugs monitored on develop, UAT, and staging branches. It must track `origin/develop`.
+- `hotfix/xxxx`: Similar to the previous branches, but this must track `main` as it addresses urgent bugs found in production.
+
+Working progress must be committed and pushed daily. 
+
+For completed work on `feature/xxxx` or `fix/xxxx`, you must initiate a Merge Request via the GitHub UI, from your branch to `develop`. The title format should be:
+
+- `[FEATURE|FIX][FRONTEND|BACKEND]: Some comments`
+
+If the Merge Request is still in progress, you can add "Draft:" at the beginning of the title.
