@@ -1,14 +1,14 @@
 package repository;
 
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.List;
 
 import entities.Project;
+import utils.StatsHolder;
 
 public interface ProjectRepository {
 
-	List<Project> read() throws SQLException;
+	List<Project> read(int from, int length) throws SQLException;
 
 	Project readById(int id) throws SQLException;
 
@@ -20,5 +20,7 @@ public interface ProjectRepository {
 
 	List<Project> searchByTitle(String title) throws SQLException;
 
-	public HashMap<Integer, Integer> getStats(int id);
+	public StatsHolder getStats(int id);
+
+	Long getCount() throws SQLException;
 }

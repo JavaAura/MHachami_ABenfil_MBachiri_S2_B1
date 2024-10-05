@@ -7,33 +7,37 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Logger;
 
 import entities.Project;
 import enums.ProjectStatus;
 import repository.ProjectRepository;
 import utils.DatabaseConnection;
+import utils.StatsHolder;
 
 public class ProjectRepositoryImpl implements ProjectRepository {
 	private Connection connection;
+	private static final Logger LOGGER = Logger.getLogger(ProjectRepositoryImpl.class.getName());
 
 	public ProjectRepositoryImpl() {
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			String errorMessage = e.getMessage();
+			LOGGER.warning("error: " + errorMessage);
 		}
 		this.connection = DatabaseConnection.getConnection();
 	}
 
 	@Override
-	public List<Project> read() throws SQLException {
-		String query = "SELECT * FROM projects";
+	public List<Project> read(int from, int length) throws SQLException {
+		String query = "SELECT * FROM projects ORDER BY id DESC LIMIT ?, ?";
 
-		Statement statement = connection.createStatement();
-		ResultSet rs = statement.executeQuery(query);
+		PreparedStatement pstmt = connection.prepareStatement(query);
+		pstmt.setInt(1, from);
+		pstmt.setInt(2, length);
+		ResultSet rs = pstmt.executeQuery();
 		List<Project> projects = new ArrayList<>();
 		Project project;
 
@@ -42,6 +46,21 @@ public class ProjectRepositoryImpl implements ProjectRepository {
 			projects.add(project);
 		}
 		return projects;
+	}
+
+	@Override
+	public Long getCount() throws SQLException {
+		String query = "SELECT COUNT( * ) as count FROM projects";
+
+		Statement stmt = connection.createStatement();
+
+		ResultSet rs = stmt.executeQuery(query);
+		long count = 0;
+
+		if (rs.next()) {
+			count = rs.getLong("count");
+		}
+		return count;
 	}
 
 	@Override
@@ -125,7 +144,42 @@ public class ProjectRepositoryImpl implements ProjectRepository {
 	}
 
 	@Override
-	public HashMap<Integer, Integer> getStats(int id) {
-		return null;
+	public StatsHolder getStats(int id) {
+		String memberCountQuery = "SELECT COUNT(DISTINCT tm.member_id) AS member_count FROM team_projects tp "
+				+ "JOIN team_members tm ON tp.team_id = tm.team_id WHERE tp.project_id = ?";
+
+		String taskCountQuery = "SELECT COUNT(DISTINCT mt.task_id) AS task_count FROM team_projects tp "
+				+ "JOIN team_members tm ON tp.team_id = tm.team_id "
+				+ "JOIN member_tasks mt ON tm.member_id = mt.member_id WHERE tp.project_id = ?";
+
+		StatsHolder statsHolder = new StatsHolder();
+
+		try {
+			PreparedStatement memberPstmt = connection.prepareStatement(memberCountQuery);
+			memberPstmt.setInt(1, id);
+			ResultSet memberRs = memberPstmt.executeQuery();
+
+			if (memberRs.next())
+				statsHolder.setMemberCount(memberRs.getInt("member_count"));
+
+			memberRs.close();
+			memberPstmt.close();
+
+			PreparedStatement taskPstmt = connection.prepareStatement(taskCountQuery);
+			taskPstmt.setInt(1, id);
+			ResultSet taskRs = taskPstmt.executeQuery();
+
+			if (taskRs.next())
+				statsHolder.setTaskCount(taskRs.getInt("task_count"));
+
+			taskRs.close();
+			taskPstmt.close();
+
+		} catch (SQLException e) {
+			String errorMessage = e.getMessage();
+			LOGGER.warning("error: " + errorMessage);
+		}
+
+		return statsHolder;
 	}
 }
