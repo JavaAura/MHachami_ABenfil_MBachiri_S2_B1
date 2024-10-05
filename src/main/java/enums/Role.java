@@ -1,7 +1,12 @@
 package enums;
 
 public enum Role {
-	ProjectManager,
-	Developer,
-	Designer
+	PROJECTMANAGER,
+	DEVELOPER,
+	DESIGNER;
+
+	@Override
+    public String toString() {
+        return name(); 
+    }
 }
