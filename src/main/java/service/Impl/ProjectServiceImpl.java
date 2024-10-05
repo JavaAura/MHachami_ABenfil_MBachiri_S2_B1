@@ -3,6 +3,7 @@ package service.Impl;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.logging.Logger;
 
 import javax.xml.bind.ValidationException;
 
@@ -17,6 +18,7 @@ public class ProjectServiceImpl implements ProjectService {
 
 	private ProjectRepositoryImpl repository = new ProjectRepositoryImpl();
 	private Input validator = new Input();
+	private static final Logger LOGGER = Logger.getLogger(ProjectServiceImpl.class.getName());
 
 	@Override
 	public Project getProject(String idParam) throws ValidationException {
@@ -25,7 +27,8 @@ public class ProjectServiceImpl implements ProjectService {
 		try {
 			return repository.readById(id);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			String errorMessage = e.getMessage();
+			LOGGER.warning("error: " + errorMessage);
 		}
 		return null;
 	}
@@ -35,8 +38,8 @@ public class ProjectServiceImpl implements ProjectService {
 		try {
 			return repository.getCount();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			String errorMessage = e.getMessage();
+			LOGGER.warning("error: " + errorMessage);
 		}
 		return 0;
 	}
@@ -55,7 +58,8 @@ public class ProjectServiceImpl implements ProjectService {
 		try {
 			projects = repository.read(from, length);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			String errorMessage = e.getMessage();
+			LOGGER.warning("error: " + errorMessage);
 		}
 		return projects;
 	}
@@ -73,7 +77,8 @@ public class ProjectServiceImpl implements ProjectService {
 		try {
 			repository.create(project);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			String errorMessage = e.getMessage();
+			LOGGER.warning("error: " + errorMessage);
 		}
 		return project;
 	}
@@ -94,7 +99,8 @@ public class ProjectServiceImpl implements ProjectService {
 		try {
 			repository.update(project);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			String errorMessage = e.getMessage();
+			LOGGER.warning("error: " + errorMessage);
 		}
 		return project;
 	}
@@ -110,7 +116,8 @@ public class ProjectServiceImpl implements ProjectService {
 				return null;
 			repository.delete(project);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			String errorMessage = e.getMessage();
+			LOGGER.warning("error: " + errorMessage);
 		}
 		return project;
 	}
@@ -123,7 +130,8 @@ public class ProjectServiceImpl implements ProjectService {
 		try {
 			projects = repository.searchByTitle(title);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			String errorMessage = e.getMessage();
+			LOGGER.warning("error: " + errorMessage);
 		}
 		return projects;
 	}
