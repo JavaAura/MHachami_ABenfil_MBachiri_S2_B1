@@ -25,9 +25,9 @@
             
             
 					<c:if test="${not empty errorMessage}">
-				        <div style="color: red; margin-bottom: 15px;">
-				            Error: ${errorMessage}
-				        </div>
+				        <div id="alert" class="alert alert-danger" style="color: red; margin-bottom: 15px;" role="alert">
+						  ${ errorMessage }
+						</div>
 			    	</c:if>
 					<form method="post" action="${ isUpdate ? 'update' : 'store' }">
 					  <div class="form-row">

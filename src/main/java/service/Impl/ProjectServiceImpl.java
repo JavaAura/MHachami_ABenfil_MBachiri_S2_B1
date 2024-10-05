@@ -125,7 +125,7 @@ public class ProjectServiceImpl implements ProjectService {
 	@Override
 	public List<Project> searchForProject(String titleInput) throws ValidationException {
 
-		String title = validator.validateStr(titleInput, "Id");
+		String title = validator.validateStr(titleInput, "Project Title");
 		List<Project> projects = null;
 		try {
 			projects = repository.searchByTitle(title);
