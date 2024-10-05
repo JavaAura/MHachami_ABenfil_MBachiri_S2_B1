@@ -91,7 +91,7 @@ CREATE TABLE team_members(
 CREATE TABLE member_tasks(
 	task_id INT,
 	member_id INT,
-	FOREIGN KEY (task_id) REFERENCES tasks(id),
+	FOREIGN KEY (task_id) REFERENCES tasks(id) ON DELETE CASCADE,
 	FOREIGN KEY (member_id) REFERENCES members(id)
 );
 
