@@ -211,12 +211,12 @@ public class ProjectServlet extends HttpServlet {
 			List<Project> projects = projectService.searchForProject(title);
 			req.setAttribute("projects", projects);
 			req.setAttribute("title", title);
-			this.getServletContext().getRequestDispatcher("/views/project/index.jsp").forward(req, resp);
+			this.getServletContext().getRequestDispatcher("/views/project").forward(req, resp);
 		} catch (Exception e) {
 			String errorMessage = e.getMessage();
 			LOGGER.warning("error: " + errorMessage);
 			req.setAttribute("errorMessage", errorMessage);
-			this.getServletContext().getRequestDispatcher("/views/error-404.jsp").forward(req, resp);
+			index(req, resp);
 		}
 	}
 }
