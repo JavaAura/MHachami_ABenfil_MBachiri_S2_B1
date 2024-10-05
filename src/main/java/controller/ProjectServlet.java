@@ -118,7 +118,8 @@ public class ProjectServlet extends HttpServlet {
 			LOGGER.info("Calling projectService.updateProject");
 			Project project = projectService.updateProject(name, description, startDate, endDate, status, id);
 			LOGGER.info("Project updated successfully, redirecting");
-			resp.sendRedirect("/teamsync/project");
+			String contextPath = req.getContextPath();
+			resp.sendRedirect(contextPath + "/project");
 		} catch (Exception e) {
 			String errorMessage = e.getMessage();
 			LOGGER.warning("error: " + errorMessage);
@@ -141,7 +142,8 @@ public class ProjectServlet extends HttpServlet {
 				req.getRequestDispatcher("/views/error-404.jsp").forward(req, resp);
 				return;
 			}
-			resp.sendRedirect("/teamsync/project");
+			String contextPath = req.getContextPath();
+			resp.sendRedirect(contextPath + "/project");
 		} catch (Exception e) {
 			String errorMessage = e.getMessage();
 			LOGGER.warning("error: " + errorMessage);
