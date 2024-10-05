@@ -12,14 +12,14 @@ public class Member {
 
 	public Member(){}
 
-	public Member(String firstName , String secondName,String email , Role usRole){
+	public Member(String firstName , String secondName,String email , Role userRole){
 		this.firstName = firstName;
 		this.secondName = secondName;
 		this.email = email;
 		this.userRole = userRole;
 	}	
 
-	public Member(Long Id,String firstName , String secondName,String email , Role usRole){
+	public Member(Long Id,String firstName , String secondName,String email , Role userRole){
 		this.Id = Id;
 		this.firstName = firstName;
 		this.secondName = secondName;
