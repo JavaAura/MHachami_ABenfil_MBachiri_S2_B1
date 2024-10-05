@@ -10,4 +10,5 @@ public interface TaskRepository {
     Task getTaskById(int id) throws SQLException;
     void updateTask(Task task) throws SQLException;
     void deleteTaskById(int id) throws SQLException;
+    void assignToMembers(int id, int[] membersIds) throws SQLException;
 }
