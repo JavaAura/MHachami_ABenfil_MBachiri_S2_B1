@@ -4,6 +4,7 @@ import enums.Priority;
 import enums.TaskStatus;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class Task {
 
@@ -14,6 +15,7 @@ public class Task {
     private TaskStatus status;
     private LocalDate creationDate;
     private LocalDate deadline;
+    private List<Member> assignedMembers;
 
 
     public Task(String title, String description, Priority priority, TaskStatus status, LocalDate creationDate,LocalDate deadline) {
@@ -25,6 +27,9 @@ public class Task {
         this.deadline = deadline;
     }
     public Task() {}
+
+    public List<Member> getAssignedMembers() { return this.assignedMembers; }
+    public void setAssignedMembers(List<Member> assignedMembers) { this.assignedMembers = assignedMembers; }
 
     // getters
     public int getId() {return id;}
