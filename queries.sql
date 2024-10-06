@@ -57,9 +57,9 @@ CREATE TABLE members(
 	first_name VARCHAR(255),
 	last_name VARCHAR(255),
 	email VARCHAR(255) UNIQUE,
-	role ENUM('ProjectManager',
-			'Developer',
-			'Designer')
+	role ENUM('PROJECTMANAGER',
+			'DEVELOPER',
+			'DESIGNER')
 );
 
 /*
@@ -77,13 +77,13 @@ CREATE TABLE team_projects(
  * Create team_members table
  */
 
-CREATE TABLE team_members(
-	team_id INT,
-	member_id INT,
-	FOREIGN KEY (team_id) REFERENCES teams(id),
-	FOREIGN KEY (member_id) REFERENCES members(id)
+CREATE TABLE team_members (
+    team_id INT,
+    member_id INT,
+    FOREIGN KEY (team_id) REFERENCES teams(id) ON DELETE CASCADE,
+    FOREIGN KEY (member_id) REFERENCES members(id) ON DELETE CASCADE,
+    PRIMARY KEY (team_id, member_id)
 );
-
 /*
  * Create team_members table
  */

@@ -10,7 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import model.MemberModel;
-import java.sql.*;
+
+import java.sql.SQLException;
 import java.util.List;
 import java.io.IOException;
 import java.util.Optional;
@@ -20,8 +21,10 @@ import org.slf4j.LoggerFactory;
 
 import entities.Member;
 import enums.Role;
+
 import repository.IMemberRepository;
 import repository.impl.MemberRepositoryImpl;
+
 
 
 public class MemberServlet  extends HttpServlet  {
@@ -58,62 +61,14 @@ public class MemberServlet  extends HttpServlet  {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
         String action = req.getParameter("action");
-        try {
             if ("create".equals(action)) {
-                Member member = new Member();
-                member.setFirstName(req.getParameter("first_name"));
-                member.setSecondName(req.getParameter("second_name"));
-                member.setEmail(req.getParameter("email"));
-                member.setUserRole(Role.valueOf(req.getParameter("role")));
-
-                memberRepositoryImpl.create(member);
-
-
-                res.sendRedirect("member?action=list");
+                createP(req, res);
             } else if ("update".equals(action)) {
-
-                Member member = new Member();
-                member.setId( Long.parseLong(req.getParameter("id")));
-                member.setFirstName(req.getParameter("first_name"));
-                member.setSecondName(req.getParameter("second_name"));
-                member.setEmail(req.getParameter("email"));
-
-                Member inserted = memberRepositoryImpl.updateMember(member);
-                MemberModel memberModel = new MemberModel();
-
-
-                if (inserted != null) {
-                    memberModel.setSuccess("Member updated successfully");
-                    req.setAttribute("model", memberModel);
-                    res.sendRedirect("member?action=edit&id=" + member.getId());
-                    return; 
-                } else {
-                    // RequestDispatcher dispatcher = req.getRequestDispatcher("errorPage.jsp");
-                    // dispatcher.forward(req, res);
-                    return;
-                }
-
-
-
-
+               update(req,res);
             } else if ("delete".equals(action)) {
-                Long id =  Long.parseLong(req.getParameter("id"));
-                Boolean deleted = memberRepositoryImpl.deleteMember(id);
-                MemberModel memberModel = new MemberModel();
-
-                if(deleted){
-                    memberModel.setSuccess("Member updated successfully");
-                    req.setAttribute("model", memberModel);
-                    res.sendRedirect("member?action=list");
-                }else{
-                    // RequestDispatcher dispatcher = req.getRequestDispatcher("errorPage.jsp");
-                    // dispatcher.forward(req, res);
-                    return;
-                }
+                delete(req,res);
             }
-        } catch (SQLException e) {
-            throw new ServletException(e);
-        }
+       
     }
 
     // GET REQUEST 
@@ -177,4 +132,68 @@ public class MemberServlet  extends HttpServlet  {
         }
     }
 
+    protected void createP(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+        try {
+            Member member = new Member();
+            member.setFirstName(req.getParameter("first_name"));
+            member.setSecondName(req.getParameter("second_name"));
+            member.setEmail(req.getParameter("email"));
+            member.setUserRole(Role.valueOf(req.getParameter("role")));
+
+            memberRepositoryImpl.create(member);
+
+
+            res.sendRedirect("member?action=list");
+        } catch (Exception e) {
+            logger.error("Error ", e);
+        }
+    }
+    protected void delete(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+        try {
+            Long id =  Long.parseLong(req.getParameter("id"));
+                Boolean deleted = memberRepositoryImpl.deleteMember(id);
+                MemberModel memberModel = new MemberModel();
+
+                if(deleted){
+                    memberModel.setSuccess("Member deleted successfully");
+                    req.setAttribute("model", memberModel);
+                    res.sendRedirect("member?action=list");
+                }else{
+                    // RequestDispatcher dispatcher = req.getRequestDispatcher("errorPage.jsp");
+                    // dispatcher.forward(req, res);
+                    return;
+                }
+        } catch (Exception e) {
+            logger.error("Error ", e);
+        }
+    }
+
+    protected void update(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException 
+    {
+       try {
+        Member member = new Member();
+        member.setId( Long.parseLong(req.getParameter("id")));
+        member.setFirstName(req.getParameter("first_name"));
+        member.setSecondName(req.getParameter("second_name"));
+        member.setEmail(req.getParameter("email"));
+
+        Member inserted = memberRepositoryImpl.updateMember(member);
+        MemberModel memberModel = new MemberModel();
+
+
+        if (inserted != null) {
+            memberModel.setSuccess("Member updated successfully");
+            req.setAttribute("model", memberModel);
+            res.sendRedirect("member?action=edit&id=" + member.getId());
+            return; 
+        } else {
+            // RequestDispatcher dispatcher = req.getRequestDispatcher("errorPage.jsp");
+            // dispatcher.forward(req, res);
+            return;
+        }
+       } catch (Exception e) {
+        logger.error("Error ", e);
+
+       }
+    }
 }
