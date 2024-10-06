@@ -14,11 +14,13 @@ CREATE TABLE projects (
 	description VARCHAR(255),
 	start_date DATE,
 	end_date DATE,
+	team_id INT NULL,
 	status ENUM('InPreparation',
 				'InProgress',
 				'Paused',
 				'Completed',
-				'Canceled') DEFAULT 'InPreparation'
+				'Canceled') DEFAULT 'InPreparation',
+	FOREIGN KEY (team_id) REFERENCES teams(id) ON DELETE CASCADE
 );
 
 /*
@@ -60,17 +62,6 @@ CREATE TABLE members(
 	role ENUM('PROJECTMANAGER',
 			'DEVELOPER',
 			'DESIGNER')
-);
-
-/*
- * Create team_projects table
- */
-
-CREATE TABLE team_projects(
-	team_id INT,
-	project_id INT,
-	FOREIGN KEY (team_id) REFERENCES teams(id),
-	FOREIGN KEY (project_id) REFERENCES projects(id)
 );
 
 /*
