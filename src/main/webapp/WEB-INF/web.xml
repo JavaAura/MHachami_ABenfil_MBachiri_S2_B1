@@ -6,14 +6,6 @@
 
     <display-name>team-sync</display-name>
     <servlet>
-      <servlet-name>TeamServlet</servlet-name>
-      <servlet-class>controller.TeamServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-      <servlet-name>TeamServlet</servlet-name>
-      <url-pattern>/team</url-pattern>
-  </servlet-mapping>
-    <servlet>
         <servlet-name>TaskServlet</servlet-name>
         <servlet-class>controller.TaskServlet</servlet-class>
     </servlet>
@@ -21,6 +13,25 @@
         <servlet-name>TaskServlet</servlet-name>
         <url-pattern>/tasks</url-pattern>
     </servlet-mapping>
+
+	<servlet>
+        <servlet-name>MemberServlet</servlet-name>
+        <servlet-class>controller.MemberServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>MemberServlet</servlet-name>
+        <url-pattern>/member</url-pattern>
+    </servlet-mapping>
+
+	<servlet>
+        <servlet-name>TeamServlet</servlet-name>
+        <servlet-class>controller.TeamServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>TeamServlet</servlet-name>
+        <url-pattern>/team</url-pattern>
+    </servlet-mapping>
+
 
     <welcome-file-list>
         <welcome-file>index.jsp</welcome-file>
