@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import repository.Impl.TaskRepositoryImpl;
 import repository.Impl.TeamRepositoryImpl;
+import repository.impl.MemberRepositoryImpl;
 import utils.Input;
 
 import java.io.*;
@@ -43,7 +44,7 @@ public class TaskServlet extends HttpServlet {
         String action = request.getParameter("action");
         try {
             if (action == null || action.isEmpty()) {
-                response.sendRedirect("tasks?action=list");
+                response.sendRedirect("tasks?action=list&page=1");
             } else if ("add".equalsIgnoreCase(action)) {
                 request.getRequestDispatcher("views/tasks/add-form.jsp").forward(request, response);
             } else if ("list".equalsIgnoreCase(action)) {
@@ -70,8 +71,8 @@ public class TaskServlet extends HttpServlet {
                 int id = Integer.parseInt(request.getParameter("id"));
                 Task task = taskRepository.getTaskById(id);
                 if (task.getId() == 0) {response.sendRedirect(request.getContextPath() + "/error-404.jsp");return;}
-                TeamRepositoryImpl teamRepository = new TeamRepositoryImpl();
-                List<Member> members = teamRepository.getMembers(); // assuming 'getMembers' returns all members in teams
+                MemberRepositoryImpl memberRepository = new MemberRepositoryImpl();
+                List<Member> members = memberRepository.getAllMembers();
                 request.setAttribute("members", members);
                 request.setAttribute("task", task);
                 RequestDispatcher dispatcher = request.getRequestDispatcher("views/tasks/assign-member.jsp");
