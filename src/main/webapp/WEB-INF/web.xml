@@ -86,6 +86,11 @@
 		<servlet-name>ProjectServlet</servlet-name>
 		<url-pattern>/project/delete</url-pattern>
 	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>ProjectServlet</servlet-name>
+		<url-pattern>/project/assign</url-pattern>
+	</servlet-mapping>
 
 	
 	<filter>

@@ -11,12 +11,14 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import entities.Project;
+import entities.Team;
 import enums.ProjectStatus;
 import repository.ProjectRepository;
 import utils.DatabaseConnection;
 import utils.StatsHolder;
 
 public class ProjectRepositoryImpl implements ProjectRepository {
+
 	private Connection connection;
 	private static final Logger LOGGER = Logger.getLogger(ProjectRepositoryImpl.class.getName());
 
@@ -86,6 +88,7 @@ public class ProjectRepositoryImpl implements ProjectRepository {
 		project.setStartDate(LocalDate.parse(rs.getString("start_date")));
 		project.setEndDate(LocalDate.parse(rs.getString("end_date")));
 		project.setStatus(ProjectStatus.valueOf(rs.getString("status")));
+		project.setTeamId(rs.getInt("team_id"));
 		return project;
 	}
 
@@ -182,4 +185,16 @@ public class ProjectRepositoryImpl implements ProjectRepository {
 
 		return statsHolder;
 	}
+
+	@Override
+	public void assignProject(Team team, Project project) throws SQLException {
+		String query = "UPDATE projects SET team_id = ? WHERE id = ?";
+		PreparedStatement pstmt = connection.prepareStatement(query);
+		pstmt.setLong(1, team.getId());
+		pstmt.setLong(2, project.getId());
+
+		pstmt.executeUpdate();
+
+	}
+
 }

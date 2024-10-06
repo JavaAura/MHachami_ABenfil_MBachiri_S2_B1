@@ -10,6 +10,7 @@
                     <div class="panel-body">
                         <h2 class="text-center">${project.name}</h2>
                         <p class="text-center">${project.description}</p>
+                        <p class="text-center">team : ${team.name}</p>
                         <div class="row">
                             <div class="col-sm-6">
                                 <h4 class="text-center">Project Timeline</h4>
@@ -36,7 +37,7 @@
                         <h4 class="text-center">Project Actions</h4>
                         <div class="text-center">
                             <a href="<c:url value='/project/edit?project_id=${project.id}'/>" class="btn btn-primary">Edit Project</a>
-                            <a href="<c:url value='/project/${project.id}/members'/>" class="btn btn-default">Manage Members</a>
+                            <a href="<c:url value='/project/assign?project_id=${project.id}'/>" class="btn btn-default">Assign This Project</a>
                             <a href="<c:url value='/project'/>" class="btn btn-info">View Projects</a>
                         </div>
                     </div>

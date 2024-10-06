@@ -11,6 +11,7 @@ public class Project {
 	private LocalDate startDate;
 	private LocalDate endDate;
 	private ProjectStatus status = ProjectStatus.InPreparation;
+	private int teamId;
 
 	public Project() {
 	}
@@ -83,5 +84,13 @@ public class Project {
 
 	public void setStatus(ProjectStatus status) {
 		this.status = status;
+	}
+
+	public int getTeamId() {
+		return teamId;
+	}
+
+	public void setTeamId(int teamId) {
+		this.teamId = teamId;
 	}
 }
