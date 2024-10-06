@@ -68,7 +68,7 @@
 					</c:if>
 			
 					 <button type="submit" class="btn btn-primary btn-block">Save Changes</button>
-			                    <a href="/teamsync/project" class="btn btn-link">Changed My Mind (back home)</a>
+			                    <a href="${pageContext.request.contextPath}/project" class="btn btn-link">Changed My Mind (back home)</a>
 					</form>
              	</div>
 	        

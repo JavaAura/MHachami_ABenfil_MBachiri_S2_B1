@@ -38,12 +38,12 @@
                 <div class="table-title">
                     <div class="row">
 					    <div class="col-sm-6">
-					        <h2><a href="/teamsync/project/">Project</a> <b>List</b></h2>
+					        <h2><a href="${pageContext.request.contextPath}/project/">Project</a> <b>List</b></h2>
 					    </div>
 					    
 					    <div class="col-sm-3">
 					        <div class="search-box">
-					            <form action="/teamsync/project/search">
+					            <form action="${pageContext.request.contextPath}/project/search">
 					                <i class="material-icons">&#xE8B6;</i>
 					                <c:choose>
 					                    <c:when test="${ title != null }">
@@ -57,7 +57,7 @@
 					        </div>
 					    </div>
 					    <div class="col-sm-3">
-					        <a href="/teamsync/project/create" class="btn btn-success btn-block"
+					        <a href="${pageContext.request.contextPath}/project/create" class="btn btn-success btn-block"
 					           style="background-color: #28a745; border: none; color: white; padding: 5px 1px; border-radius: 5px; text-align: center; text-decoration: none;">
 					            Create New Project
 					        </a>
@@ -87,9 +87,9 @@
                             <td>${project.status}</td>
                             <td>
 								
-								<form action="/teamsync/project/delete" method="post" class="d-inline-block delete-form">   
-	                                <a href="/teamsync/project/show?project_id=${project.id}" class="view" title="View" data-toggle="tooltip"><i class="material-icons">&#xE417;</i></a>
-									<a href="/teamsync/project/edit?project_id=${project.id}" class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
+								<form action="${pageContext.request.contextPath}/project/delete" method="post" class="d-inline-block delete-form">   
+	                                <a href="${pageContext.request.contextPath}/project/show?project_id=${project.id}" class="view" title="View" data-toggle="tooltip"><i class="material-icons">&#xE417;</i></a>
+									<a href="${pageContext.request.contextPath}/project/edit?project_id=${project.id}" class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
 								    <input type="hidden" name="project_id" value="${project.id}"/>                             
 								    <button title="Delete" class="delete-btn" data-toggle="tooltip">
 								        <i class="material-icons">&#xE872;</i>
@@ -110,7 +110,7 @@
 				    <ul class="pagination">
 				        <c:if test="${page > 1}">
 				            <li class="page-item">
-				                <a href="/teamsync/project?page=${page - 1}" class="page-link">
+				                <a href="${pageContext.request.contextPath}/project?page=${page - 1}" class="page-link">
 				                    <i class="fa fa-angle-double-left"></i>
 				                </a>
 				            </li>
@@ -118,13 +118,13 @@
 				        
 				        <c:forEach begin="1" end="${pageNumbers}" var="pageNum">
 				            <li class="page-item ${pageNum == page ? 'active' : ''}">
-				                <a href="/teamsync/project?page=${pageNum}" class="page-link">${pageNum}</a>
+				                <a href="${pageContext.request.contextPath}/project?page=${pageNum}" class="page-link">${pageNum}</a>
 				            </li>
 				        </c:forEach>
 				        
 				        <c:if test="${page < pageNumbers}">
 				            <li class="page-item">
-				                <a href="/teamsync/project?page=${page + 1}" class="page-link">
+				                <a href="${pageContext.request.contextPath}/project?page=${page + 1}" class="page-link">
 				                    <i class="fa fa-angle-double-right"></i>
 				                </a>
 				            </li>
