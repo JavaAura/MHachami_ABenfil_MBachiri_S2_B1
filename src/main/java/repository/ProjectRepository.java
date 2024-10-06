@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import entities.Project;
+import entities.Team;
 import utils.StatsHolder;
 
 public interface ProjectRepository {
@@ -23,4 +24,6 @@ public interface ProjectRepository {
 	public StatsHolder getStats(int id);
 
 	Long getCount() throws SQLException;
+
+	void assignProject(Team team, Project project) throws SQLException;
 }

@@ -8,8 +8,10 @@ import java.util.logging.Logger;
 import javax.xml.bind.ValidationException;
 
 import entities.Project;
+import entities.Team;
 import enums.ProjectStatus;
 import repository.Impl.ProjectRepositoryImpl;
+import repository.Impl.TeamRepositoryImpl;
 import service.ProjectService;
 import utils.Input;
 import utils.StatsHolder;
@@ -141,5 +143,24 @@ public class ProjectServiceImpl implements ProjectService {
 		int projectId = validator.validateNum(id, "Id");
 
 		return repository.getStats(projectId);
+	}
+
+	@Override
+	public boolean assignProjectToTeam(String teamIdParam, String projctIdParam) throws ValidationException {
+		int projectId = validator.validateNum(projctIdParam, "Project Id");
+		long teamId = validator.validateNum(teamIdParam, "Team Id");
+
+		try {
+			Project project = repository.readById(projectId);
+			Team team = new TeamRepositoryImpl().getTeamById(teamId);
+			repository.assignProject(team, project);
+
+			return true;
+		} catch (SQLException e) {
+			String errorMessage = e.getMessage();
+			LOGGER.warning("error: " + errorMessage);
+			return false;
+		}
+
 	}
 }

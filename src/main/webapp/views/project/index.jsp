@@ -28,6 +28,12 @@
 	</style>
 
     <div class="container">
+    					<c:if test="${not empty successMessage}">
+						    <div id="alert" class="alert alert-success" style="color: green; margin-top: 15px;" role="alert">
+							  ${ successMessage }
+							</div>
+    					</c:if>
+    	
     					<c:if test="${not empty errorMessage}">
 						    <div id="alert" class="alert alert-danger" style="color: red; margin-top: 15px;" role="alert">
 							  ${ errorMessage }

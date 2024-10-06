@@ -2,6 +2,7 @@ package controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -13,6 +14,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.ValidationException;
 
 import entities.Project;
+import entities.Team;
+import repository.Impl.TeamRepositoryImpl;
 import service.Impl.ProjectServiceImpl;
 import utils.ProjectStatusUtil;
 import utils.StatsHolder;
@@ -47,10 +50,29 @@ public class ProjectServlet extends HttpServlet {
 		case "show":
 			show(req, resp);
 			break;
+		case "assign":
+			assignView(req, resp);
+			break;
 		default:
 			index(req, resp);
 			break;
 		}
+	}
+
+	@Override
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		String action = req.getServletPath();
+		if (!action.equals("/project"))
+			action = action.substring("/project/".length());
+
+		if (action.equals("delete"))
+			delete(req, resp);
+		else if (action.equals("update"))
+			update(req, resp);
+		else if (action.equals("assign"))
+			assign(req, resp);
+		else
+			store(req, resp);
 	}
 
 	protected void index(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -73,20 +95,6 @@ public class ProjectServlet extends HttpServlet {
 		this.getServletContext().getRequestDispatcher("/views/project/index.jsp").forward(req, resp);
 	}
 
-	@Override
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		String action = req.getServletPath();
-		if (!action.equals("/project"))
-			action = action.substring("/project/".length());
-
-		if (action.equals("delete"))
-			delete(req, resp);
-		else if (action.equals("update"))
-			update(req, resp);
-		else
-			store(req, resp);
-	}
-
 	protected void store(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String name = req.getParameter("name");
 		String description = req.getParameter("description");
@@ -95,8 +103,8 @@ public class ProjectServlet extends HttpServlet {
 
 		try {
 			Project project = projectService.createProject(name, description, startDate, endDate);
-			String contextPath = req.getContextPath();
-			resp.sendRedirect(contextPath + "/project");
+			req.setAttribute("successMessage", "Project Created Successfully");
+			index(req, resp);
 		} catch (Exception e) {
 			String errorMessage = e.getMessage();
 			LOGGER.warning("error: " + errorMessage);
@@ -119,8 +127,8 @@ public class ProjectServlet extends HttpServlet {
 			LOGGER.info("Calling projectService.updateProject");
 			Project project = projectService.updateProject(name, description, startDate, endDate, status, id);
 			LOGGER.info("Project updated successfully, redirecting");
-			String contextPath = req.getContextPath();
-			resp.sendRedirect(contextPath + "/project");
+			req.setAttribute("successMessage", "Project updated Successfully");
+			index(req, resp);
 		} catch (Exception e) {
 			String errorMessage = e.getMessage();
 			LOGGER.warning("error: " + errorMessage);
@@ -143,8 +151,8 @@ public class ProjectServlet extends HttpServlet {
 				req.getRequestDispatcher("/views/error-404.jsp").forward(req, resp);
 				return;
 			}
-			String contextPath = req.getContextPath();
-			resp.sendRedirect(contextPath + "/project");
+			req.setAttribute("successMessage", "Project Deleted Successfully");
+			index(req, resp);
 		} catch (Exception e) {
 			String errorMessage = e.getMessage();
 			LOGGER.warning("error: " + errorMessage);
@@ -194,6 +202,18 @@ public class ProjectServlet extends HttpServlet {
 
 			req.setAttribute("statusUtil", new ProjectStatusUtil());
 
+			if (project.getTeamId() != 0) {
+				try {
+					TeamRepositoryImpl tImpl = new TeamRepositoryImpl();
+					Team team = tImpl.getTeamById((long) project.getTeamId());
+					req.setAttribute("team", team);
+				} catch (SQLException e) {
+					String errorMessage = e.getMessage();
+					LOGGER.warning("error: " + errorMessage);
+					req.setAttribute("errorMessage", errorMessage);
+				}
+			}
+
 			this.getServletContext().getRequestDispatcher("/views/project/detail.jsp").forward(req, resp);
 		} catch (ValidationException e) {
 			String errorMessage = e.getMessage();
@@ -223,4 +243,56 @@ public class ProjectServlet extends HttpServlet {
 			index(req, resp);
 		}
 	}
+
+	private void assignView(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		String projectIdParam = req.getParameter("project_id");
+		List<Team> teams;
+
+		try {
+			TeamRepositoryImpl tImpl = new TeamRepositoryImpl();
+			teams = tImpl.getAllTeams(0, tImpl.getTeamCount());
+
+		} catch (SQLException e) {
+			String errorMessage = e.getMessage();
+			LOGGER.warning("error: " + errorMessage);
+			req.setAttribute("errorMessage", errorMessage);
+			index(req, resp);
+			return;
+		}
+		try {
+			Project project = projectService.getProject(projectIdParam);
+			req.setAttribute("teams", teams);
+			req.setAttribute("project", project);
+			RequestDispatcher dispatcher = req.getRequestDispatcher("/views/project/assign.jsp");
+			dispatcher.forward(req, resp);
+		} catch (Exception e) {
+			String errorMessage = e.getMessage();
+			LOGGER.warning("error: " + errorMessage);
+			req.setAttribute("errorMessage", errorMessage);
+			index(req, resp);
+		}
+	}
+
+	private void assign(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		String teamId = req.getParameter("team_id");
+		String projectId = req.getParameter("project_id");
+
+		try {
+			boolean checker = projectService.assignProjectToTeam(teamId, projectId);
+			if (!checker) {
+				String errorMessage = "Something went wrong";
+				LOGGER.warning("error: " + errorMessage);
+				req.setAttribute("errorMessage", errorMessage);
+			} else
+				req.setAttribute("successMessage", "Project Assigned Successfully");
+
+		} catch (Exception e) {
+			String errorMessage = e.getMessage();
+			LOGGER.warning("error: " + errorMessage);
+			req.setAttribute("errorMessage", errorMessage);
+		}
+
+		index(req, resp);
+	}
+
 }

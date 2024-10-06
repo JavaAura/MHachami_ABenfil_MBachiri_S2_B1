@@ -27,4 +27,6 @@ public interface ProjectService {
 	public StatsHolder getProjectStats(String id) throws ValidationException;
 
 	long getProjectCount();
+
+	public boolean assignProjectToTeam(String team_id, String projct_id) throws ValidationException;
 }
