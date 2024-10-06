@@ -5,6 +5,7 @@ public enum Role {
 	DEVELOPER,
 	DESIGNER;
 
+
 	@Override
     public String toString() {
         return name(); 
