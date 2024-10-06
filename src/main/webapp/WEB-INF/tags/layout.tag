@@ -28,9 +28,10 @@
 <body>
 <header>
     <nav>
-        <a href="index.jsp">Home</a>
-        <a href="about.jsp">About</a>
-        <a href="contact.jsp">Contact</a>
+        <a href="${pageContext.request.contextPath}/project">Home</a>
+        <a class="btn btn-light" href="${pageContext.request.contextPath}/tasks">Tasks</a>
+        <a href="${pageContext.request.contextPath}/member">Members</a>
+        <a href="${pageContext.request.contextPath}/project">Projects</a>
     </nav>
 </header>
 

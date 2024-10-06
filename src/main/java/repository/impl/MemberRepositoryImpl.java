@@ -76,7 +76,7 @@ public class MemberRepositoryImpl implements IMemberRepository {
                 member.setFirstName(rs.getString("first_name"));
                 member.setSecondName(rs.getString("last_name"));
                 member.setEmail(rs.getString("email"));
-                member.setUserRole(Role.valueOf(rs.getString("role")));
+                member.setUserRole(Role.valueOf(rs.getString("role").toUpperCase()));
             }
         } catch (SQLException e) {
             logger.error("error in findMemberById function " , e);
@@ -116,7 +116,7 @@ public class MemberRepositoryImpl implements IMemberRepository {
                 member.setFirstName(resultSet.getString("first_name"));
                 member.setSecondName(resultSet.getString("last_name"));
                 member.setEmail(resultSet.getString("email"));
-                member.setUserRole(Role.valueOf(resultSet.getString("role"))); 
+                member.setUserRole(Role.valueOf(resultSet.getString("role").toUpperCase()));
                 members.add(member);
             }
             logger.info("Retrieved all members. Total count: {}", members.size());
